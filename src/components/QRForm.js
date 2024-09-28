@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {HText, PText} from './ResponsiveText';
-import {Input, Button, Label, Select} from './Forms';
+import {Input, TextArea, Button, Label, Select} from './Forms';
 
 
 const QRForm = ({className, mode, setMode, setItems, generating, setGenerating}) => {
@@ -9,10 +9,18 @@ const QRForm = ({className, mode, setMode, setItems, generating, setGenerating})
         first: '',
         last: '',
     });
-    
+    const [minInput, setMinInput] = useState(1);
+
+
     const handleFormChange = (event) => {
         const { name, value } = event.target;
-        setFormData({...formData, [name]: value});
+        setFormData(prevData =>{
+            const newData = {...prevData, [name]: value}
+            setMinInput(newData.first);
+
+            return newData;
+        });
+        
     }
 
     const handleChangeMode = (event) => {
@@ -22,16 +30,17 @@ const QRForm = ({className, mode, setMode, setItems, generating, setGenerating})
             first: '',
             lase: ''
         });
+        
     }
 
     const generateQr = (event) => {
         event.preventDefault();
         setGenerating(true);
-        const codesArray = [];
+        var codesArray = [];
     
-        if(mode === 'single'){
-          codesArray.push(formData.word);
-        } 
+        if(mode === 'text'){
+            codesArray = formData.word.split('\n').filter(item => item.trim() !== "");
+        }
         else{
           const firstNum = parseInt(formData.first);
           const lastNum = parseInt(formData.last);
@@ -48,49 +57,63 @@ const QRForm = ({className, mode, setMode, setItems, generating, setGenerating})
           }
         }
         
-    
+        if(codesArray.length <= 0){
+            setGenerating(false);
+            return;
+            
+        }
+        
+        
         setItems(codesArray);
-        setFormData({word: '', first: '', last: ''});
-      }
+            setFormData({word: '', first: '', last: ''});
+        
+        
+    }
     
     return (
         <form action='#' method='post' className={className} onSubmit={generateQr}>
             <div className='flex items-center mb-3'>
                 <img src={require('../img/logo.png')} className='w-10 h-10 mr-3'/>
-                <HText size='lg'>QRCode Generator</HText>
+                <HText>QRCode Generator</HText>
             </div>
             
 
             <div className={'w-[50%] pr-3 mb-4'}>
                 <Label htmlFor='mode'>Mode</Label>
                 <Select id='mode' onChange={handleChangeMode}>
-                <option value='single'>Generate Single Text</option>
-                <option value='multiple'>Generate Multiple IDs</option>
+                <option value='text'>Generate from Text</option>
+                <option value='range'>Generate with range</option>
                 </Select>
             </div>
             
             <div className='grid grid-cols-2'>
 
-                <div className='mb-4 col-span-1'>
-                    <Label htmlFor="word">{mode === 'single' ? 'Text' : 'Prefix'}</Label>
-                    <Input type="text" id="word" name='word' value={formData.word || ''} onChange={handleFormChange} placeholder='Keyword' required={mode === 'single'}/>
+                
+                <div className='mb-4 col-span-2'>
+                    <Label htmlFor="word">{mode === 'text' ? 'Text' : 'Prefix'}</Label>
+                    {
+                        mode === 'text' ? 
+                        <TextArea rows={8} id="word" name='word' value={formData.word || ''} onChange={handleFormChange} placeholder='Enter multiple lines of text' required={mode === 'text'}/> :
+                        <Input type="text" id="word" name='word' value={formData.word || ''} onChange={handleFormChange} placeholder='Keyword' required={mode === 'range'}/>
+                    }
+                    
+                    
                 </div>
-                <div className='mb-4 col-span-1'></div>
 
-                <div className={`mb-4 col-span-1 ${mode === 'single' && 'hidden'}`}>
+                <div className={`mb-4 col-span-1 ${mode === 'text' && 'hidden'}`}>
                     <Label htmlFor="first">First Number <span className='text-red-600'>*</span></Label>
-                    <Input className={'w-full lg:w-auto'} type="number" id="first" name='first' value={formData.first || ''} onChange={handleFormChange} placeholder='0' min={1} required={mode === 'multiple'} />
+                    <Input className={'w-full lg:w-auto'} type="number" id="first" name='first' value={formData.first || ''} onChange={handleFormChange} placeholder='0' min={1} required={mode === 'range'} />
                 </div>
                 
-                <div className={`mb-4 col-span-1 ${mode === 'single' && 'hidden'}`}>
+                <div className={`mb-4 col-span-1 ${mode === 'text' && 'hidden'}`}>
                     <Label htmlFor="last">Last Number <span className='text-red-600'>*</span></Label>
-                    <Input className={'w-full lg:w-auto'} type="number" id="last" name='last' value={formData.last || ''} onChange={handleFormChange} placeholder='0' min={1} required={mode === 'multiple'} />
+                    <Input className={'w-full lg:w-auto'} type="number" id="last" name='last' value={formData.last || ''} onChange={handleFormChange} min={minInput} placeholder={minInput} required={mode === 'range'} />
                 </div>
 
             </div>
             
 
-            <Button className='bg-accent text-white' disabled={generating}>Generate</Button>
+            <Button className='bg-accent text-white mt-1' disabled={generating}>Generate</Button>
             { generating && 
                 <div className='inline-block ml-5'>
                 <PText className={'inline-block font-semibold text-primary mr-3'}>Generating</PText>

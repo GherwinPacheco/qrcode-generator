@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import QRCode from 'qrcode';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { PText } from './ResponsiveText';
 import { Button } from './Forms';
 
 
@@ -28,8 +27,6 @@ const QRContainer = ({qrRefs, zippingFiles, setZippingFiles, items, generating, 
     const downloadZip = () => {
         setZippingFiles(true);
         const zip = new JSZip();
-
-        const filename = `${items[0]}-${items.length}`;
     
         const convertToBlob = (canvas) => {
             return new Promise((resolve, reject) => {
@@ -60,7 +57,7 @@ const QRContainer = ({qrRefs, zippingFiles, setZippingFiles, items, generating, 
             .then(() => {
                 zip.generateAsync({type:"blob"}).then(function(content) {
                 // see FileSaver.js
-                saveAs(content, `${filename}.zip`);
+                saveAs(content, 'qrcodes.zip');
                 setZippingFiles(false);
             })})
             .catch((error) => {
@@ -119,7 +116,7 @@ const QRContainer = ({qrRefs, zippingFiles, setZippingFiles, items, generating, 
                 <div className='flex justify-end items-center'>
                     { zippingFiles && 
                     <div className='inline-block mr-5'>
-                        <PText className={'inline-block font-semibold text-primary mr-3'}>Zipping Files</PText>
+                        <p className={'inline-block font-semibold text-primary mr-3'}>Zipping Files</p>
                         <img src={require('../img/loading.gif')} className='inline-block w-5 h-5'/>
                     </div>
                     }

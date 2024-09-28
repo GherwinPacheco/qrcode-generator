@@ -74,6 +74,32 @@ export const Input = ({className, ...rest}) => {
     );
 };
 
+export const TextArea = ({className, ...rest}) => {
+
+    const defaultClassName = `
+        w-full
+        block
+        px-2
+        py-1
+        rounded-sm
+        border
+        border-gray-300
+        focus:shadow-lg
+        focus:ring
+        focus:ring-2
+        focus:ring-blue-300
+        focus:outline-0
+        duration-300
+    `;
+
+    return (
+        <textarea
+            className={`${defaultClassName} ${className}`} 
+            {...rest} 
+        />
+    );
+};
+
 export const Select = ({children, className, ...rest}) => {
     const defaultClassName = `
         block
