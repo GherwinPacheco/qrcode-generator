@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/qrcode-generator/static/css/main.8364fc93.css",
-    "main.js": "/qrcode-generator/static/js/main.4c8cfd46.js",
+    "main.css": "/qrcode-generator/static/css/main.fbac1f62.css",
+    "main.js": "/qrcode-generator/static/js/main.41422b29.js",
     "static/js/453.62f8d5d1.chunk.js": "/qrcode-generator/static/js/453.62f8d5d1.chunk.js",
     "static/media/loading.gif": "/qrcode-generator/static/media/loading.803f24369a085e35482e.gif",
     "index.html": "/qrcode-generator/index.html",
-    "main.8364fc93.css.map": "/qrcode-generator/static/css/main.8364fc93.css.map",
-    "main.4c8cfd46.js.map": "/qrcode-generator/static/js/main.4c8cfd46.js.map",
+    "main.fbac1f62.css.map": "/qrcode-generator/static/css/main.fbac1f62.css.map",
+    "main.41422b29.js.map": "/qrcode-generator/static/js/main.41422b29.js.map",
     "453.62f8d5d1.chunk.js.map": "/qrcode-generator/static/js/453.62f8d5d1.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.8364fc93.css",
-    "static/js/main.4c8cfd46.js"
+    "static/css/main.fbac1f62.css",
+    "static/js/main.41422b29.js"
   ]
 }
